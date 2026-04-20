@@ -20,7 +20,7 @@ const Appbar = () => {
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center gap-2">
             
-            <span className="text-white text-2xl font-bold tracking-tighter">megWedd</span>
+            <span className="text-white text-lg ">megWedd</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -39,7 +39,7 @@ const Appbar = () => {
           {/* CTA Button */}
           <div className="hidden md:block">
             <button className="bg-white text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all">
-              Book Now
+              Book a call
             </button>
           </div>
 
@@ -68,7 +68,7 @@ const Appbar = () => {
             </a>
           ))}
           <button className="w-full mt-4 bg-white text-black px-6 py-3 rounded-full font-bold text-center">
-            Buy Template
+            Book a call
           </button>
         </div>
       )}
