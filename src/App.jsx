@@ -1,18 +1,17 @@
 import React from 'react'
 import './App.css'
-import Appbar from './common/Appbar'
-import Hero from './components/Home/Hero'
-import Services from './components/Home/Services'
-import Footer from './common/Footer'
-
+import { Route,  Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import Works from './pages/Works'
 function App() {
   return (
-    <div className=''>
-      <Appbar/>
-      <Hero/>
-      <Services/>
-      <Footer/>
-    </div>
+    <>
+    <Routes>
+      <Route path='/' element = {<Home/>}/>
+      <Route path='/work' element = {<Works/>}/>
+    </Routes>
+    
+    </>
   )
 }
 

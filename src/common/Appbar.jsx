@@ -28,6 +28,7 @@ const Appbar = () => {
             {navLinks.map((link) => (
               <a
                 key={link.name}
+                
                 href={link.href}
                 className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
               >

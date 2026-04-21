@@ -1,49 +1,76 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
-
+import { ArrowRight  } from 'lucide-react';
 function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className='relative mt-32 px-6 pb-12 pt-24  border-t '>
-      <div className='max-w-7xl mx-auto flex flex-col lg:items-center text-left lg:text-center'>
-        
-        {/* Over-sized Premium Heading */}
-        <h1 className='text-white lg:text-[10rem] text-6xl font-light tracking-tighter leading-none mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000'>
-          Get <span className="italic font-serif opacity-80">Started</span>
-        </h1>
-        
-        <p className='text-white/40 text-lg md:text-xl max-w-xl font-light leading-relaxed mb-12'>
-          Start your wedding journey today. Let’s transform your moments into a timeless legacy.
-        </p>
-
-        {/* Action Buttons */}
-        <div className='flex flex-col sm:flex-row gap-4 mb-24 w-full sm:w-auto'>
-          <button className='group flex items-center justify-center gap-3 bg-white text-black rounded-full px-10 py-5 font-bold hover:bg-neutral-200 transition-all duration-500 cursor-pointer'>
-            Book Your Event
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+    <footer className="relative mt-32 px-6 pb-12 pt-32 overflow-hidden">
+      {/* Hairline Top Border with Gradient */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-32 items-end">
           
-          <button className='bg-transparent text-white border border-white/20 rounded-full font-medium px-10 py-5 hover:bg-white hover:text-black hover:border-white transition-all duration-500 cursor-pointer backdrop-blur-sm'>
-            Member Sign In
-          </button>
-        </div>
-
-        {/* Bottom Bar: The "Professional" Detail */}
-        <div className='w-full pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8'>
-          <div className='flex flex-col items-start lg:items-center md:items-start'>
-            <span className='text-white font-bold text-xl tracking-tighter'>megWedd</span>
-            <p className='text-white/20 text-xs uppercase tracking-widest mt-2'>© 2026 All Rights Reserved</p>
+          {/* Left Side: Massive Branding */}
+          <div className="space-y-8">
+            <h1 className="text-white text-7xl md:text-8xl xl:text-9xl font-extralight tracking-tighter leading-[0.85] animate-in fade-in slide-in-from-bottom-8 duration-1000">
+              Capture <br />
+              <span className="italic font-serif text-neutral-500">Emotion.</span>
+            </h1>
+            <p className="text-white/40 text-lg max-w-md font-light leading-relaxed">
+              Based in Kerala, capturing timeless stories globally. We don't just take photos; we preserve legacies.
+            </p>
           </div>
 
-          <div className='flex gap-8 text-white/40 text-sm font-light'>
-            <a href="#" className='hover:text-white transition-colors'>Instagram</a>
-            <a href="#" className='hover:text-white transition-colors'>Portfolio</a>
-            <a href="#" className='hover:text-white transition-colors'>Privacy</a>
+          {/* Right Side: Premium CTA Box */}
+          <div className="flex flex-col items-start lg:items-end gap-8">
+            <div className="group relative">
+              <button className="relative z-10 flex items-center gap-4 bg-white text-black rounded-full px-12 py-6 font-semibold overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 cursor-pointer">
+                <span className="relative z-10">BOOK YOUR DATE</span>
+                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform duration-500" />
+              </button>
+              {/* Soft Glow behind button */}
+              <div className="absolute inset-0 bg-white/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+            
+           
+          </div>
+        </div>
+
+        {/* The "Big Logo" Watermark Section */}
+        <div className="relative py-20  ">
+          {/* Subtle oversized background text */}
+          <h2 className="text-[15vw] font-bold text-white/[0.02] select-none tracking-tighter text-center leading-none">
+            MEGWEDD
+          </h2>
+          
+          {/* Footer Links Overlay */}
+          <div className="absolute inset-0 flex flex-col md:flex-row justify-between items-center px-4 gap-6">
+            <div className="text-white/20 text-xs tracking-widest uppercase font-medium">
+              &copy; {currentYear} MEGWEDD STUDIOS
+            </div>
+            
+            <nav className="flex gap-10">
+              {['Work', 'About', 'Journal', 'Contact'].map((item) => (
+                <a 
+                  key={item} 
+                  href={`#${item.toLowerCase()}`} 
+                  className="text-white/40 text-sm font-light hover:text-white transition-colors relative group"
+                >
+                  {item}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full" />
+                </a>
+              ))}
+            </nav>
+
+            <div className="text-white/20 text-xs tracking-widest uppercase font-medium">
+              Privacy / Terms
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Decorative Gradient Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[30%] bg-white/[0.02] blur-[120px] rounded-full pointer-events-none" />
+     
     </footer>
   );
 }
