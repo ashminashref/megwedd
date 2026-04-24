@@ -8,7 +8,7 @@ const Appbar = () => {
 
   const navLinks = [
     { name: 'About us', href: '/about' },
-    { name: 'Work', href: '/work' },
+    { name: 'Work', href: '/works' },
     { name: 'Services', href: '/services' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'Blog', href: '#' },

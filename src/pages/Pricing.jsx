@@ -6,7 +6,6 @@ import { IoCheckmark, IoArrowForward } from "react-icons/io5"
 const pricingPlans = [
   {
     name: "Starter",
-    price: "$899",
     description: "For intimate elopements",
     features: [
       "4-hour coverage",
@@ -16,12 +15,11 @@ const pricingPlans = [
       "Digital delivery",
       "Social media teaser",
     ],
-    buttonText: "Get Started",
+    buttonText: "Contact Us",
     highlighted: false,
   },
   {
     name: "Growth",
-    price: "$2,199",
     description: "For full wedding days",
     features: [
       "8-hour coverage",
@@ -31,12 +29,11 @@ const pricingPlans = [
       "Premium photo book",
       "Two cinematographers",
     ],
-    buttonText: "Get Started",
+    buttonText: "Contact US",
     highlighted: true, // This one gets the orange button and border
   },
   {
     name: "Scale",
-    price: "$3,999",
     description: "Multi-day luxury events",
     features: [
       "12-hour coverage",
@@ -46,7 +43,7 @@ const pricingPlans = [
       "Rehearsal dinner coverage",
       "Priority editing",
     ],
-    buttonText: "Get Started",
+    buttonText: "Contact Us",
     highlighted: false,
   },
   {
@@ -101,12 +98,8 @@ function Pricing() {
 
               {/* Price */}
               <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-4xl font-bold tracking-tight">
-                  {plan.price === "Custom" ? "" : plan.price}
-                </span>
-                <span className="text-neutral-500 font-medium">
-                  {plan.price === "Custom" ? "Custom pricing" : "/event"}
-                </span>
+               
+             
               </div>
               <p className="text-sm text-neutral-500 mb-8">{plan.description}</p>
 
@@ -134,19 +127,7 @@ function Pricing() {
           ))}
         </div>
 
-        {/* Bottom Floating Info Box (Matching screenshot) */}
-        <div className="mt-12 flex flex-col md:flex-row gap-4 justify-end items-end">
-           <div className="bg-white text-black p-6 rounded-2xl max-w-xs shadow-2xl flex flex-col gap-2 scale-90 md:scale-100">
-              <div className="flex gap-2 mb-2">
-                <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold italic">W</div>
-                <div className="w-8 h-8 bg-black rounded flex items-center justify-center text-white font-bold">f</div>
-              </div>
-              <p className="text-xs font-bold uppercase tracking-tighter">Explore our premium work</p>
-              <a href="#" className="text-blue-600 text-xs font-bold hover:underline flex items-center gap-1">
-                More portfolios <IoArrowForward />
-              </a>
-           </div>
-        </div>
+       
       </div>
 
       <Footer />
