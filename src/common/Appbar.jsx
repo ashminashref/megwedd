@@ -10,7 +10,7 @@ const Appbar = () => {
     { name: 'About us', href: '/about' },
     { name: 'Work', href: '/work' },
     { name: 'Services', href: '/services' },
-    { name: 'Pricing', href: '#' },
+    { name: 'Pricing', href: '/pricing' },
     { name: 'Blog', href: '#' },
   ];
 

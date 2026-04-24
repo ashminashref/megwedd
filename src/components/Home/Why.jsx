@@ -105,7 +105,7 @@ function Why() {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans">
+    <div className="min-h-screen  text-white font-sans">
       
       
       <main className="container mx-auto px-6 py-24 max-w-6xl">
