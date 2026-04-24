@@ -21,13 +21,13 @@ const AlbumSection = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // 1. Setup the Infinite Rotation based on Scroll
+    //Infinite Rotation based on Scroll
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: triggerRef.current,
         start: "top top",
         end: "+=3000", // Longer scroll for smoother rotation
-        scrub: 1.5,   // Slightly higher scrub for "heavy/premium" feel
+        scrub: 1.5,   // Slightly higher scrub 
         pin: true,
         anticipatePin: 1,
       }
@@ -49,11 +49,11 @@ const AlbumSection = () => {
       {/* This creates a mask so the images fade out smoothly at the edges and bottom */}
       <div 
         ref={triggerRef} 
-        className="relative min-h-screen flex flex-col items-center justify-center  [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_85%)]"
+        className="relative min-h-screen flex flex-col items-center justify-start   [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_85%)]"
       >
         
         {/* Content Layer */}
-        <div className="relative z-30  px-6 mb-20 pointer-events-none">
+        <div className="relative z-30 pt-40 px-6 mb-20 pointer-events-none">
           <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6 leading-[0.9]">
             The <span className="italic font-serif font-light text-neutral-400">Eternal</span> <br /> Archive
           </h2>
@@ -96,7 +96,7 @@ const AlbumSection = () => {
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent z-40 pointer-events-none" />
 
         {/* Bottom Feature Grid */}
-        <div className="absolute bottom-12 w-full max-w-5xl px-6 grid grid-cols-3 gap-8 text-center z-50 invisible md:visible">
+        <div className="absolute bottom-12w-full max-w-5xl px-6 grid grid-cols-3 gap-8 text-center z-50 invisible md:visible">
             <div className="group cursor-default">
                 <h4 className="text-white font-bold text-sm group-hover:text-neutral-400 transition-colors">Cinematic</h4>
                 <div className="h-[1px] w-8 bg-neutral-800 mx-auto mt-2" />
