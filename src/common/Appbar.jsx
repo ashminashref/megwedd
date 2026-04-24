@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 
 const Appbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'About us', href: '#' },
-    { name: 'Work', href: '#' },
-    { name: 'Services', href: '#' },
+    { name: 'About us', href: '/about' },
+    { name: 'Work', href: '/work' },
+    { name: 'Services', href: '/services' },
     { name: 'Pricing', href: '#' },
     { name: 'Blog', href: '#' },
   ];
@@ -26,14 +28,14 @@ const Appbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 
-                href={link.href}
+                to={link.href}
                 className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 

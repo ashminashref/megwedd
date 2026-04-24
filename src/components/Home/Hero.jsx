@@ -6,7 +6,6 @@ function Hero() {
   return (
     <section className="relative w-full min-h-screen flex flex-col lg:items-center lg:justify-center overflow-hidden  text-white pt-24">
       
-      {/* 1. Premium Background: Atmospheric Depth */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Soft Purple/Indigo Glow - Top Left */}
         <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-[#1A0B6B]/20 blur-[120px] rounded-full animate-pulse" />
@@ -44,7 +43,6 @@ function Hero() {
   
   <button className="
     group relative flex items-center justify-center
-    /* w-fit prevents stretching; stays as wide as content */
     w-fit 
     gap-3 md:gap-4 
     px-7 py-4 md:px-10 md:py-5 
@@ -95,7 +93,7 @@ function Hero() {
       {/* 3. Transition to Features */}
       <div className="w-full mt-6 relative z-10">
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent z-[-1]" />
-        <FeaturesSection />
+        {/* <FeaturesSection /> */}
       </div>
       
     </section>
