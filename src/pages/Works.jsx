@@ -6,9 +6,7 @@ import Footer from '../common/Footer'
 function Works() {
   return (
     <div>
-        <Appbar/>
         <AlbumSection/>
-        <Footer/>
     </div>
   )
 }

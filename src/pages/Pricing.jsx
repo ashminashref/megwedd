@@ -66,7 +66,6 @@ const pricingPlans = [
 function Pricing() {
   return (
     <div className="bg-black min-h-screen text-white font-sans selection:bg-orange-500/30">
-      <Appbar />
       
       {/* Header Section */}
       <div className="pt-44 px-6 max-w-7xl mx-auto">
@@ -130,7 +129,6 @@ function Pricing() {
        
       </div>
 
-      <Footer />
     </div>
   )
 }
