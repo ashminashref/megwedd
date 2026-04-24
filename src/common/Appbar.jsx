@@ -63,13 +63,12 @@ const Appbar = () => {
         <div className="md:hidden bg-black border-b border-white/10 px-4 pt-2 pb-6 space-y-1">
           {navLinks.map((link) => (
             <Link
-                key={link.name}
-                
-                to={link.href}
-                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
-              >
-                {link.name}
-              </Link>
+              key={link.name}
+              to={link.href}
+              className="block px-3 py-4 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg"
+            >
+              {link.name}
+            </Link>
           ))}
           <button className="w-full mt-4 bg-white text-black px-6 py-3 rounded-full font-bold text-center">
             Book a call
