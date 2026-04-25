@@ -8,6 +8,8 @@ const Appbar = () => {
   const location = useLocation();
 
   const navLinks = [
+        { name: 'Home', href: '/' },
+
     { name: 'About us', href: '/about' },
     { name: 'Work', href: '/works' },
     { name: 'Services', href: '/services' },

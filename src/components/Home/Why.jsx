@@ -115,10 +115,10 @@ function Why() {
           <h2 className="text-white/50 font-bold tracking-[0.3em] uppercase text-[10px] mb-4">
             The MegWedd Advantage
           </h2>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
+          <h1 className="text-5xl md:text-7xl  mb-3">
             Why Choose Us?
           </h1>
-          <p className="mx-auto text-neutral-400 text-lg leading-relaxed">
+          <p className="mx-auto text-neutral-400 text-sm leading-relaxed">
             We blend world-class wedding cinematography with a seamless digital experience for our couples.
           </p>
         </div>

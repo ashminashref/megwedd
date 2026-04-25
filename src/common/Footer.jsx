@@ -51,7 +51,7 @@ function Footer() {
             </div>
             
             <nav className="flex gap-10">
-              {['Work', 'About', 'Journal', 'Contact'].map((item) => (
+              {['Work', 'About', 'Services', 'Pricing'].map((item) => (
                 <a 
                   key={item} 
                   href={`#${item.toLowerCase()}`} 
@@ -63,7 +63,8 @@ function Footer() {
               ))}
             </nav>
 
-            <div className="text-white/20 text-xs tracking-widest uppercase font-medium">
+          
+            <div className="text-blue-500  underline cursor-pointer hover:text-blue-400 animation duration-500  text-xs tracking-widest  font-medium">
               Privacy / Terms
             </div>
           </div>

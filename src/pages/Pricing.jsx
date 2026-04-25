@@ -69,10 +69,10 @@ function Pricing() {
       
       {/* Header Section */}
       <div className="pt-44 px-6 max-w-7xl mx-auto">
-        <h1 className="text-white text-5xl md:text-7xl font-bold tracking-tighter">
+        <h1 className="text-white text-5xl md:text-7xl  tracking-tighter">
           Flexible Packages
         </h1>
-        <p className="text-neutral-500 max-w-lg mt-6 text-lg font-light leading-relaxed">
+        <p className="text-neutral-500 max-w-lg mt-6 text-sm font-light leading-relaxed">
           Designed for every milestone. Select a plan that fits your roadmap, 
           from simple highlights to enterprise-grade cinematic builds.
         </p>

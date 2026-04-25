@@ -1,0 +1,119 @@
+.folder-card {
+  width: 280px; /* Made it larger for a more premium presence */
+  height: 320px;
+  background: #000;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+}
+
+.folder-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+}
+
+/* 1. VISUAL AREA */
+.folder-visual {
+  height: 60%;
+  position: relative;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mesh-gradient {
+  position: absolute;
+  inset: 0;
+  background: var(--folder-accent);
+  opacity: 0.6;
+  filter: blur(60px);
+  background-image: 
+    radial-gradient(at 0% 0%, var(--folder-accent) 0, transparent 50%),
+    radial-gradient(at 100% 100%, #ffffff33 0, transparent 50%);
+}
+
+/* 2. PAPERS STACK */
+.paper-orbit {
+  position: relative;
+  width: 140px;
+  height: 100px;
+  z-index: 10;
+  transition: transform 0.5s ease;
+}
+
+.item-paper {
+  position: absolute;
+  inset: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.paper-back { transform: rotate(-10deg) translateY(5px) scale(0.9); opacity: 0.5; }
+.paper-mid { transform: rotate(6deg) translateY(0px) scale(0.95); opacity: 0.8; }
+.paper-front { transform: rotate(0deg); z-index: 2; }
+
+/* Animation on hover */
+.folder-card:hover .paper-back { transform: rotate(-25deg) translateX(-20px) translateY(-10px); opacity: 0.7; }
+.folder-card:hover .paper-mid { transform: rotate(15deg) translateX(20px) translateY(-10px); opacity: 0.9; }
+.folder-card:hover .paper-front { transform: scale(1.05); }
+
+/* 3. METADATA AREA */
+.folder-info {
+  height: 40%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, #050505, #000);
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.title {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.more-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: #777;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.more-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+.file-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  color: #888;
+  font-weight: 500;
+}
