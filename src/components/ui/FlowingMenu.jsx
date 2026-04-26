@@ -142,6 +142,7 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
         href={link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleMouseEnter}
         style={{ color: textColor }}
       >
         {text}
