@@ -31,7 +31,8 @@ const Appbar = () => {
           
           {/* Logo Section (No changes) */}
           <div className="flex-shrink-0 flex items-center gap-2">
-            <span className="text-white text-lg">megWedd</span>
+            {/* <span className="text-white text-lg">megWedd</span> */}
+            <img src="/Images/logo.png" alt="logo" style={{width:'120px'}} />
           </div>
 
           {/* Desktop Navigation */}
