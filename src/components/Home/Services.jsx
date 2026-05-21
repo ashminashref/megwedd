@@ -26,31 +26,47 @@ function Services() {
   const [permissionStatus, setPermissionStatus] = useState('unknown'); 
   const [supportsGyro, setSupportsGyro] = useState(false);
 
+  // High-frequency physics values kept completely outside of React State
   const targetX = useRef(0);
   const targetY = useRef(0);
-  const [gyro, setGyro] = useState({ x: 0, y: 0 });
+  const currentX = useRef(0);
+  const currentY = useRef(0);
+  
+  // Direct DOM pointers to avoid re-renders
+  const cardRefs = useRef([]);
+  const flareRefs = useRef([]);
   const requestRef = useRef(null);
 
-  // 1. Direct API feature-detection instead of fragile User-Agent parsing
+  // 1. Feature detection
   useEffect(() => {
     if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
       setSupportsGyro(true);
-      
-      // Auto-grant on systems that don't need a formal permission popup (like Android Chrome)
       if (!DeviceOrientationEvent.requestPermission) {
         setPermissionStatus('granted');
       }
     }
   }, []);
 
-  // 2. Linear Interpolation animation frame loop
+  // 2. Real-time DOM Modification Loop (Zero-Lag Engine)
   useEffect(() => {
     const updateMotion = () => {
-      setGyro((prev) => {
-        const nextX = prev.x + (targetX.current - prev.x) * 0.1;
-        const nextY = prev.y + (targetY.current - prev.y) * 0.1;
-        return { x: nextX, y: nextY };
+      // 1. Compute smooth linear interpolation values
+      currentX.current += (targetX.current - currentX.current) * 0.12;
+      currentY.current += (targetY.current - currentY.current) * 0.12;
+
+      // 2. Directly mutate DOM node styles imperatively (bypasses React diffing)
+      cardRefs.current.forEach((cardNode,) => {
+        if (cardNode) {
+          cardNode.style.transform = `rotateX(${currentX.current}deg) rotateY(${currentY.current}deg)`;
+        }
       });
+
+      flareRefs.current.forEach((flareNode) => {
+        if (flareNode) {
+          flareNode.style.transform = `translate3d(${currentY.current * -2.5}px, ${currentX.current * -2.5}px, 0px)`;
+        }
+      });
+
       requestRef.current = requestAnimationFrame(updateMotion);
     };
 
@@ -60,27 +76,22 @@ function Services() {
     return () => cancelAnimationFrame(requestRef.current);
   }, [permissionStatus]);
 
-  // 3. Mathematical mapping and desktop filter checks
+  // 3. Sensor stream receiver
   const handleOrientation = (event) => {
-    // CRITICAL FIX: Laptops occasionally fire an event with all null/0 values once. 
-    // If there's no real movement tracking data coming in, bail immediately.
     if (event.beta === null || event.gamma === null || (event.beta === 0 && event.gamma === 0)) {
-      return;
+      return; // Filter out dummy desktop/laptop baseline transmissions
     }
 
-    const beta = event.beta;   
-    const gamma = event.gamma; 
-
     const maxTilt = 12; 
-    const baselineBeta = 55; // Average natural angle you hold a phone out in front of you
+    const baselineBeta = 55; // Neutral wrist pitch offset config
     
-    const normalizedBeta = beta - baselineBeta;
+    const normalizedBeta = event.beta - baselineBeta;
 
-    targetX.current = Math.max(Math.min(-normalizedBeta * 0.3, maxTilt), -maxTilt);
-    targetY.current = Math.max(Math.min(gamma * 0.3, maxTilt), -maxTilt);
+    targetX.current = Math.max(Math.min(-normalizedBeta * 0.35, maxTilt), -maxTilt);
+    targetY.current = Math.max(Math.min(event.gamma * 0.35, maxTilt), -maxTilt);
   };
 
-  // 4. Pure Synchronous Permission Routine
+  // 4. Synchronous activation trigger
   const requestPermission = () => {
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
@@ -94,11 +105,10 @@ function Services() {
           }
         })
         .catch((error) => {
-          console.error("Sensor verification failed:", error);
+          console.error("Sensor connection failed:", error);
           setPermissionStatus('denied');
         });
     } else {
-      // Direct bind sequence for standard mobile engines
       setPermissionStatus('granted');
       window.addEventListener('deviceorientation', handleOrientation, true);
     }
@@ -161,69 +171,59 @@ function Services() {
         className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
         style={{ perspective: '1200px' }}
       >
-        {cardData.map((item, index) => {
-          // If permission isn't granted, values default smoothly to standard hover animations
-          const rotateX = permissionStatus === 'granted' ? gyro.x : 0;
-          const rotateY = permissionStatus === 'granted' ? gyro.y : 0;
-
-          return (
+        {cardData.map((item, index) => (
+          <div 
+            key={index} 
+            ref={(el) => (cardRefs.current[index] = el)} // Attach dynamic array reference pointer
+            className="group relative h-[450px] bg-[#0A0A0A] border border-white/10 rounded-3xl overflow-hidden transition-all duration-500 hover:border-white/30 will-change-transform"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {/* Background Image Underlay */}
             <div 
-              key={index} 
-              className="group relative h-[450px] bg-[#0A0A0A] border border-white/10 rounded-3xl overflow-hidden transition-all duration-500 hover:border-white/30"
-              style={{
-                transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-                transformStyle: 'preserve-3d',
-              }}
+              className="absolute inset-0 z-0"
+              style={{ transform: 'translateZ(-15px) scale(1.08)' }}
             >
-              {/* Background Plate Underlay */}
-              <div 
-                className="absolute inset-0 z-0"
-                style={{ transform: 'translateZ(-15px) scale(1.08)' }}
-              >
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover opacity-70 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:opacity-100 transition-all duration-[1.2s] ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/30 to-transparent" />
-              </div>
-
-              {/* Foreground Floating Core Content Layer */}
-              <div 
-                className="relative z-10 h-full p-10 flex flex-col justify-between"
-                style={{ transform: 'translateZ(35px)' }}
-              >
-                <div className="flex justify-between items-start w-full">
-                  <span className="text-white/40 text-xs uppercase tracking-widest border border-white/10 px-3 py-1 rounded-full backdrop-blur-md">
-                    {item.tag}
-                  </span>
-                  
-                  <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all duration-500">
-                    <ArrowUpRight size={18} strokeWidth={1.5} />
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-white text-3xl font-light tracking-tight mb-4 group-hover:translate-x-2 transition-transform duration-500">
-                    {item.title}
-                  </h3>
-                  <div className="h-px w-0 group-hover:w-full bg-gradient-to-r from-white/40 to-transparent transition-all duration-700 mb-4" />
-                  <p className="text-white/50 text-base leading-relaxed max-w-[260px] opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                    {item.subtitle}
-                  </p>
-                </div>
-              </div>
-
-              {/* Surface Highlight Glow Layer */}
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.06),transparent_50%)]" 
-                style={{
-                  transform: `translate3d(${rotateY * -2.5}px, ${rotateX * -2.5}px, 0px)`,
-                }}
+              <img 
+                src={item.img} 
+                alt={item.title}
+                className="w-full h-full object-cover opacity-70 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:opacity-100 transition-all duration-[1.2s] ease-out"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/30 to-transparent" />
             </div>
-          );
-        })}
+
+            {/* Foreground Content Layer */}
+            <div 
+              className="relative z-10 h-full p-10 flex flex-col justify-between"
+              style={{ transform: 'translateZ(35px)' }}
+            >
+              <div className="flex justify-between items-start w-full">
+                <span className="text-white/40 text-xs uppercase tracking-widest border border-white/10 px-3 py-1 rounded-full backdrop-blur-md">
+                  {item.tag}
+                </span>
+                
+                <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all duration-500">
+                  <ArrowUpRight size={18} strokeWidth={1.5} />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-white text-3xl font-light tracking-tight mb-4 group-hover:translate-x-2 transition-transform duration-500">
+                  {item.title}
+                </h3>
+                <div className="h-px w-0 group-hover:w-full bg-gradient-to-r from-white/40 to-transparent transition-all duration-700 mb-4" />
+                <p className="text-white/50 text-base leading-relaxed max-w-[260px] opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                  {item.subtitle}
+                </p>
+              </div>
+            </div>
+
+            {/* Surface Highlight Glow Layer */}
+            <div 
+              ref={(el) => (flareRefs.current[index] = el)} // Attach light mapping array tracking pointers
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.06),transparent_50%)] will-change-transform" 
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
