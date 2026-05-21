@@ -23,29 +23,27 @@ const cardData = [
 ];
 
 function Services() {
-  const [permissionStatus, setPermissionStatus] = useState('unknown'); // 'unknown', 'granted', 'denied'
-  const [isMobile, setIsMobile] = useState(false);
+  const [permissionStatus, setPermissionStatus] = useState('unknown'); 
+  const [supportsGyro, setSupportsGyro] = useState(false);
 
-  // Animation frame and targeting references
   const targetX = useRef(0);
   const targetY = useRef(0);
   const [gyro, setGyro] = useState({ x: 0, y: 0 });
   const requestRef = useRef(null);
 
-  // 1. Detect if the device is mobile on mount
+  // 1. Direct API feature-detection instead of fragile User-Agent parsing
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(/Mobi|Android|iPhone/i.test(navigator.userAgent));
-    };
-    checkMobile();
-
-    // Check if the browser doesn't require explicit permissions (most Android devices)
-    if (typeof DeviceOrientationEvent !== 'undefined' && !DeviceOrientationEvent.requestPermission) {
-      setPermissionStatus('granted');
+    if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
+      setSupportsGyro(true);
+      
+      // Auto-grant on systems that don't need a formal permission popup (like Android Chrome)
+      if (!DeviceOrientationEvent.requestPermission) {
+        setPermissionStatus('granted');
+      }
     }
   }, []);
 
-  // 2. Linear Interpolation (Lerp) animation loop for fluid damping
+  // 2. Linear Interpolation animation frame loop
   useEffect(() => {
     const updateMotion = () => {
       setGyro((prev) => {
@@ -62,27 +60,32 @@ function Services() {
     return () => cancelAnimationFrame(requestRef.current);
   }, [permissionStatus]);
 
-  // 3. Mathematical mapping for smooth tilts
+  // 3. Mathematical mapping and desktop filter checks
   const handleOrientation = (event) => {
-    const beta = event.beta || 0;   // Front-to-back tilt (-180 to 180)
-    const gamma = event.gamma || 0; // Left-to-right tilt (-90 to 90)
+    // CRITICAL FIX: Laptops occasionally fire an event with all null/0 values once. 
+    // If there's no real movement tracking data coming in, bail immediately.
+    if (event.beta === null || event.gamma === null || (event.beta === 0 && event.gamma === 0)) {
+      return;
+    }
 
-    const maxTilt = 15; // Cap the max tilt to keep it premium and subtle
-    const baselineBeta = 55; // Calibrate for a natural holding posture angle (~55°)
+    const beta = event.beta;   
+    const gamma = event.gamma; 
+
+    const maxTilt = 12; 
+    const baselineBeta = 55; // Average natural angle you hold a phone out in front of you
     
     const normalizedBeta = beta - baselineBeta;
 
-    targetX.current = Math.max(Math.min(-normalizedBeta * 0.4, maxTilt), -maxTilt);
-    targetY.current = Math.max(Math.min(gamma * 0.4, maxTilt), -maxTilt);
+    targetX.current = Math.max(Math.min(-normalizedBeta * 0.3, maxTilt), -maxTilt);
+    targetY.current = Math.max(Math.min(gamma * 0.3, maxTilt), -maxTilt);
   };
 
-  // 4. Bulletproof Synchronous Permission Trigger
+  // 4. Pure Synchronous Permission Routine
   const requestPermission = () => {
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
       typeof DeviceOrientationEvent.requestPermission === 'function'
     ) {
-      // Must be executed synchronously in the click handler to satisfy iOS security
       DeviceOrientationEvent.requestPermission()
         .then((response) => {
           setPermissionStatus(response);
@@ -91,19 +94,16 @@ function Services() {
           }
         })
         .catch((error) => {
-          console.error("Sensor initialization context failed:", error);
+          console.error("Sensor verification failed:", error);
           setPermissionStatus('denied');
         });
-    } else if (typeof DeviceOrientationEvent !== 'undefined') {
-      // Standard Android direct bind fallback
+    } else {
+      // Direct bind sequence for standard mobile engines
       setPermissionStatus('granted');
       window.addEventListener('deviceorientation', handleOrientation, true);
-    } else {
-      setPermissionStatus('denied');
     }
   };
 
-  // Clean up listeners on unmount
   useEffect(() => {
     if (permissionStatus === 'granted') {
       window.addEventListener('deviceorientation', handleOrientation, true);
@@ -129,17 +129,15 @@ function Services() {
           </p>
         </div>
 
-        {/* 🔥 HIGHLY HIGHLIGHTED LUXURY BUTTON STATION */}
-        {isMobile && (
+        {/* HIGH-HIGHLIGHTED INTERACTIVE CONTROL STATION */}
+        {supportsGyro && (
           <div className="w-full md:w-auto shrink-0 z-30">
             {permissionStatus !== 'granted' ? (
               <button 
                 onClick={requestPermission}
-                className="relative overflow-hidden w-full md:w-auto px-8 py-5 rounded-2xl bg-white text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(255,255,255,0.25)] border border-white active:scale-98 transition-all duration-300 animate-bounce"
+                className="relative overflow-hidden w-full md:w-auto px-8 py-5 rounded-2xl bg-white text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center justify-center gap-3 shadow-[0_0_50px_rgba(255,255,255,0.3)] border-2 border-white active:scale-95 transition-all duration-300 animate-bounce"
               >
-                {/* Shimmer Sweeping Highlight Effect */}
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full animate-[shimmer_2.5s_infinite]" />
-                
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
                 <Sparkles size={14} className="text-black" />
                 <span>Activate Motion Depth</span>
               </button>
@@ -151,19 +149,20 @@ function Services() {
             )}
             {permissionStatus === 'denied' && (
               <p className="text-rose-400 text-center text-xs mt-3 font-medium">
-                Access blocked. Tap the URL lock icon to reset permissions.
+                Sensor blocked. Tap your address bar settings to clear site permissions.
               </p>
             )}
           </div>
         )}
       </div>
 
-      {/* Cards Grid with Perspective Viewport */}
+      {/* Cards Grid Component with 3D Context */}
       <div 
         className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
-        style={{ perspective: '1200px' }} // Gives structural 3D context to child elements
+        style={{ perspective: '1200px' }}
       >
         {cardData.map((item, index) => {
+          // If permission isn't granted, values default smoothly to standard hover animations
           const rotateX = permissionStatus === 'granted' ? gyro.x : 0;
           const rotateY = permissionStatus === 'granted' ? gyro.y : 0;
 
@@ -173,10 +172,10 @@ function Services() {
               className="group relative h-[450px] bg-[#0A0A0A] border border-white/10 rounded-3xl overflow-hidden transition-all duration-500 hover:border-white/30"
               style={{
                 transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-                transformStyle: 'preserve-3d', // Ensures inner layers depth are independent
+                transformStyle: 'preserve-3d',
               }}
             >
-              {/* Background Layer (Pushed Backward) */}
+              {/* Background Plate Underlay */}
               <div 
                 className="absolute inset-0 z-0"
                 style={{ transform: 'translateZ(-15px) scale(1.08)' }}
@@ -189,7 +188,7 @@ function Services() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/30 to-transparent" />
               </div>
 
-              {/* Typography Content Layer (Popped Forward) */}
+              {/* Foreground Floating Core Content Layer */}
               <div 
                 className="relative z-10 h-full p-10 flex flex-col justify-between"
                 style={{ transform: 'translateZ(35px)' }}
@@ -215,7 +214,7 @@ function Services() {
                 </div>
               </div>
 
-              {/* Flash Highlight Flare Effect */}
+              {/* Surface Highlight Glow Layer */}
               <div 
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.06),transparent_50%)]" 
                 style={{
