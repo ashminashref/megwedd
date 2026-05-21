@@ -9,6 +9,7 @@ import Footer from './common/Footer'
 import Aboutus from './pages/Aboutus'
 import Userhome from './pages/Userhome'
 import Services from './pages/Services'
+import ScrollToTop from './components/ui/ScrollToTop'
 
 const MainLayout = () => (
   <>
@@ -20,6 +21,8 @@ const MainLayout = () => (
 
 function App() {
   return (
+    <>
+    <ScrollToTop/>
     <Routes>
       <Route element={<MainLayout />}>
         <Route path='/' element={<Home />} />
@@ -31,6 +34,7 @@ function App() {
 
       <Route path='/user' element={<Userhome />} />
     </Routes>
+    </>
   )
 }
 

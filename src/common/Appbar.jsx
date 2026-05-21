@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Appbar = () => {
@@ -32,7 +32,9 @@ const Appbar = () => {
           {/* Logo Section (No changes) */}
           <div className="flex-shrink-0 flex items-center gap-2">
             {/* <span className="text-white text-lg">megWedd</span> */}
-            <img src="/Images/logo.png" alt="logo" style={{width:'120px'}} />
+            <Link to='/'>            <img src="/Images/logo.png" alt="logo" style={{width:'120px'}} />
+
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
