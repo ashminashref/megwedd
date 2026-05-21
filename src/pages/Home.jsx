@@ -3,7 +3,7 @@ import Footer from '../common/Footer'
 import Hero from '../components/Home/Hero'
 import Services from '../components/Home/Services'
 import Why from '../components/Home/Why'
-import GyroCanvas from '../components/ui/Gyrocanvas'
+import GyroCanvas from '../components/Home/GyroCanvas'
 function Home() {
   return (
     <div>
